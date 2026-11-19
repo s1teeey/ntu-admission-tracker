@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>NTU Admission</title>
+<meta name="description" content="臺大碩士班甄試放榜工具（非官方）：一階名冊、二榜三榜、放榜即時查詢">
+<meta name="theme-color" content="#f4f5fb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="NTU Admission">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="side" aria-label="導覽">
+    <div class="brand"><div class="logo">N</div><b>NTU Admission</b></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="foot"><span class="live off" id="liveS"><i></i><span class="lt">—</span></span><span>非官方工具，以臺大公告為準</span></div>
+  </aside>
+  <main>
+    <header class="top">
+      <div style="display:flex;align-items:center;gap:10px;min-width:0"><div class="logo">N</div><h1 id="pageTitle">NTU</h1></div>
+      <div class="right"><span class="simtag" id="simTag">模擬中</span><span class="live off" id="liveT"><i></i><span class="lt">—</span></span></div>
+    </header>
+    <div class="mine" id="mine" aria-label="我的結果"></div>
+
+    <section class="tab" id="tab-overview">
+      <div class="demo-bar" id="demoBar" hidden><span>116 試玩中 · 真實榜單，只顯示准考證號</span><button class="btn sm" type="button" data-act="leave-demo">離開試玩</button></div>
+      <div class="date" id="dateLine"></div>
+      <h2 class="big" id="bigTitle">碩士班甄試放榜</h2>
+      <div class="hero" id="hero" aria-live="polite"><span class="tag" id="heroTag">—</span><h3 id="heroH">—</h3><div class="num" id="heroN" hidden></div><p id="heroP"></p><div class="row" id="heroActs"></div></div>
+      <div class="tiles" id="tiles"></div>
+      <div class="card" id="meCard">
+        <div class="sh"><h3>我的結果</h3><button class="btn link sm" type="button" data-go="settings">編輯</button></div>
+        <div class="mecards" id="meBoxes"></div>
+      </div>
+      <a class="card linkcard" id="histLink" href="#" target="_blank" rel="noopener"><div><b>歷年備取遞補</b><span>各系所歷年遞補到備取第幾順位</span></div><span class="arr">↗</span></a>
+      <div class="foot-note" data-foot></div>
+    </section>
+
+    <section class="tab" id="tab-roster">
+      <div class="pagehead"><h2 class="big">一階名冊</h2><div class="picked" id="pickedR"></div></div>
+      <div class="card">
+        <div class="sh"><h3>名冊</h3><div class="acts"><label class="switch"><input type="checkbox" id="autoLink">自動配對二榜</label><span class="tg" id="rosterTag">—</span></div></div>
+        <div id="rosterGroups"></div>
+        <div class="legend" id="legendR"></div>
+      </div>
+      <div class="card" id="tblCard">
+        <div class="sh"><h3>全體考生</h3><span class="tg" id="tblTag">—</span></div>
+        <div class="tools"><input id="q" type="search" placeholder="姓名或准考證" autocomplete="off" aria-label="搜尋"><div class="chips" id="chips"></div></div>
+        <div class="tw"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
+      </div>
+      <div class="foot-note" data-foot></div>
+    </section>
+
+    <section class="tab" id="tab-result">
+      <div class="pagehead"><h2 class="big">放榜</h2><div class="picked" id="pickedX"></div></div>
+      <div class="banner" id="banner"><div><h3 id="banH">未放榜</h3><p id="banP"></p></div><div class="acts" id="banActs"></div></div>
+      <div class="card"><div class="sh"><h3>榜單</h3></div><div id="resultGroups"></div><div class="legend" id="legendX"></div></div>
+      <div class="card" id="validCard" hidden></div>
+      <div class="foot-note" data-foot></div>
+    </section>
+
+    <section class="tab" id="tab-settings">
+      <h2 class="big">設定</h2>
+      <div class="card">
+        <div class="sh"><h3>比對的系所</h3><span class="tg" id="deptCount">—</span></div>
+        <p class="hint" style="padding:6px 20px 0;margin:0">最多 3 個，可以隨時更換。准考證號可留空。</p>
+        <div class="depts" id="deptList"></div>
+        <div style="padding:0 20px 18px"><button class="btn sm" type="button" id="addDept">新增系所</button></div>
+      </div>
+      <div class="card pad" id="dataCard">
+        <div class="k">榜單</div>
+        <div class="row" style="margin-top:8px"><button class="btn ghost sm" type="button" data-act="upload">上傳榜單 PDF</button><span class="hint" id="resInfo">尚未載入</span></div>
+        <div class="k" style="margin-top:18px">試玩</div>
+        <div class="row" style="margin-top:8px"><button class="btn ghost sm" type="button" id="demoBtn">116 試玩</button><span class="hint">用 116 學年度的真實榜單體驗（只有准考證號）</span></div>
+        <div class="k" style="margin-top:18px">資料</div>
+        <div class="row" style="margin-top:8px"><button class="btn danger sm" type="button" id="wipe">清除這台裝置上的資料</button></div>
+      </div>
+      <div class="foot-note" data-foot></div>
+    </section>
+  </main>
+  <nav class="bottom" id="bottom" aria-label="分頁"></nav>
+</div>
+<input type="file" id="pdfIn" accept="application/pdf,.pdf" hidden>
+
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="sheet">
+    <div class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <h3 id="mTitle">已放榜</h3>
+    <p id="mSub"></p>
+    <div class="res" id="mRes"></div>
+    <div class="acts"><button class="btn" id="mOk" type="button">查看榜單</button></div>
+  </div>
+</div>
+
+<script src="lib/parse.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

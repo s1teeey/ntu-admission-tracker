@@ -1,0 +1,8 @@
+name = "ntu-admission-detector"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# create once with: npx wrangler kv namespace create STATE  → paste the id below
+[[kv_namespaces]]
+binding = "STATE"
+id = "REPLACE_WITH_KV_ID"

@@ -1,0 +1,10 @@
+{
+  "year": 117,
+  "batches": {
+    "1": { "date": "", "time": "09:00" },
+    "2": { "date": "", "time": "09:00" }
+  },
+  "worker": "",
+  "feedback": "",
+  "history": "https://reserve-process-checker.vercel.app/"
+}
